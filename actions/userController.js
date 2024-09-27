@@ -1,6 +1,8 @@
 "use server"
 import { getCollection } from "@/lib/db"
 import bcrypt from 'bcrypt'
+import { cookies } from "next/headers"
+import jwt from 'jsonwebtoken'
 
 export const register = async function (prevState, formData) {
     const errors = {}
@@ -30,15 +32,29 @@ export const register = async function (prevState, formData) {
 
     //hashing password
     const salt = bcrypt.genSaltSync(10)
-    ourUser.password=bcrypt.hashSync(ourUser.password,salt)
+    ourUser.password = bcrypt.hashSync(ourUser.password, salt)
 
 
 
-    const userCollection=await getCollection('users')
-    await userCollection.insertOne(ourUser)
-    
+    const userCollection = await getCollection('users')
+    const newUser = await userCollection.insertOne(ourUser)
+    const userId = newUser.insertedId.toString()
+
+    ///creating JWT //
+    const myTokenVal = jwt.sign({ userId: userId, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 }, process.env.JWTSECRET)
+
+
+    //setting cookie
+
+    cookies().set('haikuapp', myTokenVal, {
+        httpOnly: true,
+        sameSite: "strict",
+        maxAge: 60 * 60 * 24,
+        secure:true
+    })
+
     return {
-        success:true
+        success: true
     }
     //stroing a new user db
     //log the user in by giving cookie

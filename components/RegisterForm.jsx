@@ -5,7 +5,6 @@ import {useFormState,useFormStatus} from 'react-dom'
 
 export default function RegisterForm() {
     const [formState, formAction] = useFormState(register, {});
-console.log(formState);
     
 
     return (
