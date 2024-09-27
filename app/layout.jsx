@@ -1,3 +1,4 @@
+import Header from '@/components/Header'
 import './globals.css'
 import Link from 'next/link'
 
@@ -10,29 +11,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className='bg-white'>
-        <header className='bg-gray-100'>
-          <div className='container mx-auto'>
-            <div className="navbar bg-gray-100">
-              <div className="flex-1">
-                <Link href='/' className="btn btn-ghost text-xl">
-                  Haiku App
-                </Link>
-              </div>
-              <div className="flex-none">
-                <ul className="menu menu-horizontal px-1">
-                  <li>
-                    <Link href='/'>Log In</Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-          </div>
-        </header>
-       <main className='container mx-auto p-10'> {children}</main>
-       <footer className='text-gray-400 text-center text-xs py-5'>
-        <p>Copyright &copy; {new Date().getFullYear()} All right reserved</p>
-       </footer>
+        <Header />
+        <main className='container mx-auto p-10'> {children}</main>
+        <footer className='text-gray-400 text-center text-xs py-5'>
+          <p>Copyright &copy; {new Date().getFullYear()} All right reserved</p>
+        </footer>
       </body>
     </html>
   )
