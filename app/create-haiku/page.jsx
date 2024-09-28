@@ -13,7 +13,7 @@ export default async function Page() {
     return (
         <>
         <div>Create Haiku</div>
-        <HaikuForm/>
+        <HaikuForm action="create"/>
         </>
     );
 }

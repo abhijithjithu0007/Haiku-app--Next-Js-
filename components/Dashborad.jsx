@@ -1,5 +1,6 @@
 import { getCollection } from "@/lib/db"
 import { ObjectId } from "mongodb"
+import Link from "next/link"
 
 async function getHaiku(id) {
     const collection = await getCollection('haikus')
@@ -19,7 +20,6 @@ export default async function Dashborad(prop) {
                 <div key={ind}>
                     <div>
                         {haiku.line1}
-
                     </div>
                     <div>
                         {haiku.line2}
@@ -29,6 +29,7 @@ export default async function Dashborad(prop) {
                         {haiku.line3}
 
                     </div>
+                    <Link className="bg-green-400 p-1 rounded-lg text-black m-4 pr-5 px-6" href={`/edit-haiku/${haiku._id.toString()}`}>Edit</Link>
                 </div>
             ))}
         </div>
