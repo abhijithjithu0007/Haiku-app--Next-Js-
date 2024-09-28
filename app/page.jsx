@@ -1,13 +1,14 @@
 import Link from "next/link"
 import RegisterForm from "@/components/RegisterForm"
 import { getUserFromCookie } from "@/lib/getUser"
+import Dashborad from "@/components/Dashborad"
 
 export default async function page() {
     const user = await getUserFromCookie()
     return (
         <>
             {user && (
-                <p>Welcome, You are logged In.</p>
+               <Dashborad user={user}/>
             )}
             {!user && (
                 <>
