@@ -1,6 +1,8 @@
 import HaikuForm from "@/components/HaikuForm"
 import { getCollection } from "@/lib/db"
 import { ObjectId } from "mongodb"
+import { redirect } from "next/navigation"
+import { getUserFromCookie } from "@/lib/getUser"
 
 
 async function getDoc(id) {
@@ -12,10 +14,18 @@ async function getDoc(id) {
 export default async function Page(props){
 
     const doc =await getDoc(props.params.id)
+    const user =await  getUserFromCookie()  
+      
+
+    if(user?.userId!==doc.auther.toString()){
+        return redirect("/")
+    }
     
     return (
         <div>
-            <h2>Edit the haiku</h2>
+            <div className='text-center'>
+            <h1 className='text-2xl mb-5 border-b-2 text-black'>Edit Haiku</h1>
+        </div>
             <HaikuForm haiku={doc} action="edit"/>
         </div>
     )

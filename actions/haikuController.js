@@ -78,6 +78,40 @@ export const createHaiku = async function (prevState, formData) {
 
 }
 
+//delete haiku
+
+
+
+export const deleteHaiku = async function (prevState, formData) {
+  const user = await getUserFromCookie();
+  if (!user) {
+      return redirect('/');
+  }
+
+  // Ensure formData is defined
+  if (!formData) {
+      throw new Error('Form data is not defined');
+  }
+
+  const haikuCollection = await getCollection('haikus');
+  let haikuid = formData.get('id');
+  if (typeof haikuid != 'string') haikuid = '';
+
+  const haikuInQuestion = await haikuCollection.findOne({ _id: ObjectId.createFromHexString(haikuid) });
+  if (haikuInQuestion.auther.toString() !== user.userId) {
+      return redirect('/');
+  }
+
+  await haikuCollection.deleteOne({ _id: ObjectId.createFromHexString(haikuid) });
+  return redirect('/');
+}
+
+
+
+
+
+////edit haiku
+
 
 export const editHaiku = async function (prevState, formData) {
   const user = await getUserFromCookie()
@@ -94,10 +128,14 @@ export const editHaiku = async function (prevState, formData) {
   //save to db
 
   const haikuCollection = await getCollection('haikus')
-  let haikuid = formData.get('haikuid')  
+  let haikuid = formData.get('haikuid')
   if (typeof haikuid != 'string') haikuid = ''
 
-await haikuCollection.findOneAndUpdate({_id:ObjectId.createFromHexString(haikuid)},{$set:results.myHaiku})
+  const haikuInQuestion = await haikuCollection.findOne({ _id: ObjectId.createFromHexString(haikuid) })
+  if (haikuInQuestion.auther.toString() !== user.userId) {
+    return redirect('/')
+  }
+  await haikuCollection.findOneAndUpdate({ _id: ObjectId.createFromHexString(haikuid) }, { $set: results.myHaiku })
 
   return redirect('/')
 

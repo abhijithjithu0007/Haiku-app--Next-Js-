@@ -1,83 +1,67 @@
-
 'use client'
 
 import { createHaiku, editHaiku } from '@/actions/haikuController';
-import { useFormState, useFormStatus } from 'react-dom'
+import { useFormState } from 'react-dom';
+import { CldUploadWidget } from 'next-cloudinary';
 
-
-export default function HaikuForm(props){
-    let realAction 
-    if(props.action==="create"){
-        realAction=createHaiku
-    }
-    if(props.action==="edit"){
-        realAction=editHaiku
-    }
-    
-
+export default function HaikuForm(props) {
+    let realAction = props.action === "create" ? createHaiku : editHaiku;
     const [formState, formAction] = useFormState(realAction, {});
 
-    return(
-        <form action={formAction} className="max-w-xs mx-auto">
-        <div className="mb-5">
-            <input defaultValue={props?.haiku?.line1} name="line1" type="text" autoComplete="off" placeholder="line #1" className="input input-bordered w-full max-w-xs" />
-            {formState?.errors?.line1 && (
-                <div role="alert" className="alert alert-error">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6 shrink-0 stroke-current"
-                        fill="none"
-                        viewBox="0 0 24 24">
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>{formState?.errors?.line1}</span>
+    return (
+        <div className="max-w-md mx-auto p-6">
+            <form action={formAction} className="space-y-5">
+                <div>
+                    <input
+                        defaultValue={props?.haiku?.line1}
+                        name="line1"
+                        type="text"
+                        placeholder="First line"
+                        className={`input input-bordered w-full ${formState?.errors?.line1 ? 'border-red-500' : ''}`}
+                    />
+                    {formState?.errors?.line1 && <div className="text-red-500">{formState.errors.line1}</div>}
                 </div>
-            )}
-        </div>
-        <div className="mb-5">
-            <input defaultValue={props?.haiku?.line2} name="line2" type="text" autoComplete="off" placeholder="line #2" className="input input-bordered w-full max-w-xs" />
-            {formState?.errors?.line2 && (
-                <div role="alert" className="alert alert-error">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6 shrink-0 stroke-current"
-                        fill="none"
-                        viewBox="0 0 24 24">
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>{formState?.errors?.line2}</span>
+
+                <div>
+                    <input
+                        defaultValue={props?.haiku?.line2}
+                        name="line2"
+                        type="text"
+                        placeholder="Second line"
+                        className={`input input-bordered w-full ${formState?.errors?.line2 ? 'border-red-500' : ''}`}
+                    />
+                    {formState?.errors?.line2 && <div className="text-red-500">{formState.errors.line2}</div>}
                 </div>
-            )}
-        </div>
-        <div className="mb-5">
-            <input name="line3" defaultValue={props?.haiku?.line3} type="text" autoComplete="off" placeholder="line #3" className="input input-bordered w-full max-w-xs" />
-            {formState?.errors?.line3 && (
-                <div role="alert" className="alert alert-error">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6 shrink-0 stroke-current"
-                        fill="none"
-                        viewBox="0 0 24 24">
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>{formState?.errors?.line3}</span>
+
+                <div>
+                    <input
+                        defaultValue={props?.haiku?.line3}
+                        name="line3"
+                        type="text"
+                        placeholder="Third line"
+                        className={`input input-bordered w-full ${formState?.errors?.line3 ? 'border-red-500' : ''}`}
+                    />
+                    {formState?.errors?.line3 && <div className="text-red-500">{formState.errors.line3}</div>}
                 </div>
-            )}
+                <div className='mb-4'>
+                    <CldUploadWidget
+                        uploadPreset="HaikuPreset"  
+                        signatureEndpoint=""
+                    >
+                        {({ open }) => {
+                            return <button className='btn btn-secondary' onClick={() => open()}>Upload an image</button>;
+                        }}
+                    </CldUploadWidget>
+
+
+                </div>
+
+                <input type='hidden' name='haikuid' defaultValue={props.haiku?._id?.toString()} />
+
+                <button className="btn btn-primary w-full">
+                    {props.action === 'create' ? 'Create Haiku' : 'Update Haiku'}
+                </button>
+            </form>
         </div>
-        <input type='hidden' name='haikuid' defaultValue={props.haiku?._id.toString()}/>
-        <button className="btn btn-primary">Submit</button>
-        </form>
-    )
+    );
 }

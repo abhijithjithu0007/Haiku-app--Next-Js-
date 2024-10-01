@@ -12,7 +12,9 @@ export default async function Page() {
 
     return (
         <>
-        <div>Create Haiku</div>
+        <div className='text-center'>
+            <h1 className='text-2xl mb-5 border-b-2 text-black'>Create Haiku</h1>
+        </div>
         <HaikuForm action="create"/>
         </>
     );
