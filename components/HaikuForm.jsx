@@ -44,15 +44,28 @@ export default function HaikuForm(props) {
                     {formState?.errors?.line3 && <div className="text-red-500">{formState.errors.line3}</div>}
                 </div>
                 <div className='mb-4'>
-                    <CldUploadWidget
-                        uploadPreset="HaikuPreset"  
-                        signatureEndpoint=""
+                    <CldUploadWidget 
+                        uploadPreset="HaikuPreset"
+                        signatureEndpoint="/widget-signature"
+                        onUpload={({ event, info }) => {
+                            console.log("Upload completed", info);
+                        }}
                     >
-                        {({ open }) => {
-                            return <button className='btn btn-secondary' onClick={() => open()}>Upload an image</button>;
+                        {({ open, widget }) => {
+                            function handleClick(e) {
+                                e.preventDefault();
+                                open();
+                            }
+
+                            return (
+                                <button className="btn btn-secondary" onClick={handleClick}>
+                                    Upload an image
+                                </button>
+                            );
                         }}
                     </CldUploadWidget>
 
+                    
 
                 </div>
 
@@ -61,7 +74,7 @@ export default function HaikuForm(props) {
                 <button className="btn btn-primary w-full">
                     {props.action === 'create' ? 'Create Haiku' : 'Update Haiku'}
                 </button>
-            </form>
-        </div>
+            </form >
+        </div >
     );
 }
