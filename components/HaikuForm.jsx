@@ -3,8 +3,13 @@
 import { createHaiku, editHaiku } from '@/actions/haikuController';
 import { useFormState } from 'react-dom';
 import { CldUploadWidget } from 'next-cloudinary';
+import { useState } from 'react';
 
 export default function HaikuForm(props) {
+    const [signature,setSignature] =useState("")
+    const [public_id,setPublic_id] =useState("")
+    const [version,setVersion] =useState("")
+
     let realAction = props.action === "create" ? createHaiku : editHaiku;
     const [formState, formAction] = useFormState(realAction, {});
 
@@ -46,6 +51,14 @@ export default function HaikuForm(props) {
                 <div className='mb-4'>
                     <CldUploadWidget 
                         uploadPreset="HaikuPreset"
+                        onSuccess={(result,{widget})=>{
+                            setSignature(result?.info.signature)
+                            setPublic_id(result?.info.public_id)
+                            setVersion(result?.info.version)
+                        }}
+                        onQueuesEnd={(result,{widget})=>{
+                            widget.close()
+                        }}
                         signatureEndpoint="/widget-signature"
                         onUpload={({ event, info }) => {
                             console.log("Upload completed", info);
@@ -68,6 +81,9 @@ export default function HaikuForm(props) {
                     
 
                 </div>
+                <input type="hidden" name='public_id' value={public_id}/>
+                <input type="hidden" name='version' value={version}/>
+                <input type="hidden" name='signature' value={signature}/>
 
                 <input type='hidden' name='haikuid' defaultValue={props.haiku?._id?.toString()} />
 
