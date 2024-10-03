@@ -38,28 +38,30 @@ export default function Dashboard({ user }) {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {haiku.map((haiku, ind) => (
-                        <div key={ind} className="card w-full bg-base-100 shadow-xl">
-                            <div className="card-body">
-                                <h2 className="card-title text-lg font-semibold">Haiku {ind + 1}</h2>
-                                <div>
-                                    <CldImage
-                                        width='960'
-                                        height='600'
-                                        src={haiku.photo}
-                                        sizes="100vw"
-                                        alt={`Haiku ${ind + 1}`}
-                                    />
-                                </div>
-                                <div className="text-sm text-white">
-                                    <p className="italic">{haiku.line1}</p>
-                                    <p className="italic">{haiku.line2}</p>
-                                    <p className="italic">{haiku.line3}</p>
-                                </div>
-                                <div className="card-actions justify-end mt-4">
-                                    <Link href={`/edit-haiku/${haiku._id.toString()}`}>
-                                        <button className="btn btn-sm btn-primary">Edit</button>
-                                    </Link>
-                                </div>
+                        <div key={ind} className="relative bg-white border rounded-lg shadow-md overflow-hidden">
+                            <div className="relative w-full h-64">
+                                <CldImage
+                                    className="absolute inset-0 object-cover w-full h-full"
+                                    width="650"
+                                    height="300"
+                                    src={haiku.photo}
+                                    alt={`Haiku Image ${ind + 1}`}
+                                    fillBackground
+                                    crop={{ type: 'pad', source: true }}
+                                />
+
+
+                            </div>
+                            <div className="p-4 text-sm bg-gray-800 text-white">
+                                <h2 className="text-lg font-semibold mb-2">Haiku {ind + 1}</h2>
+                                <p className="italic mb-1">{haiku.line1}</p>
+                                <p className="italic mb-1">{haiku.line2}</p>
+                                <p className="italic">{haiku.line3}</p>
+                            </div>
+                            <div className="p-4 flex justify-end">
+                                <Link href={`/edit-haiku/${haiku._id.toString()}`}>
+                                    <button className="btn btn-primary">Edit</button>
+                                </Link>
                             </div>
                         </div>
                     ))}
