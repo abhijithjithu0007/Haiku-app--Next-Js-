@@ -47,7 +47,7 @@ export default function RegisterForm() {
                   </div>
                 )}
             </div>
-            <button className="btn btn-primary">Create Account</button>
+            <button className="btn btn-primary">Create An Account</button>
         </form>
     );
 }
